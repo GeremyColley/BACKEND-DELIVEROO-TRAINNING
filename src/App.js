@@ -1,6 +1,6 @@
 import "./App.css";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 // Components
 import Category from "./components/Category";
 import Cart from "./components/Cart";
@@ -18,6 +18,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [cart, setCart] = useState([]);
   const [theme, setTheme] = useState("white");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,8 +38,12 @@ function App() {
   const handleAddToCart = (meal) => {
     const cartCopy = [...cart];
     const mealPresent = cartCopy.find((elem) => elem.id === meal.id);
-    if (mealPresent) mealPresent.quantity++;
-    else cartCopy.push({ ...meal, quantity: 1 });
+    if (mealPresent) {
+      mealPresent.quantity++;
+      setCart((prev) => { return {quantity : prev.quantity + 1 }});
+    } else {
+      cartCopy.push({ ...meal, quantity: 1 });
+    }
     setCart(cartCopy);
   };
 
@@ -50,11 +55,12 @@ function App() {
       cartCopy.splice(index, 1);
     } else {
       mealPresent.quantity--;
+      setCart((prev) => { return {quantity : prev.quantity - 1 }});
     }
     setCart(cartCopy);
   };
 
-  let total = calculateTotal(cart);
+  let total = useMemo(() => calculateTotal(cart), [cart]);
 
   return isLoading ? (
     <p>Loading...</p>
@@ -76,6 +82,11 @@ function App() {
         </button>
       </div>
       <div className="content">
+      <input
+        type="text"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}/>
+
         <div className="container sections-container">
           <section className="left-section">
             {data.categories.map((category, index) => {
