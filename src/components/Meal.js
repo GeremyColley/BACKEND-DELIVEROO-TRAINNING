@@ -1,4 +1,5 @@
 const Meal = ({ meal, handleAddToCart }) => {
+  console.log("meal evoke");
   return (
     <div
       className="meal"

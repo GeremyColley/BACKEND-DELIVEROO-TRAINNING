@@ -1,4 +1,6 @@
 const Cart = ({ cart, handleRemoveFromCart, handleAddToCart, total }) => {
+
+  console.log("Cart evoke");
   return cart.length !== 0 ? (
     <div className="cart">
       {cart.map((meal) => {

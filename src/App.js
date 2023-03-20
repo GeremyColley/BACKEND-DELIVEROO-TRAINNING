@@ -21,6 +21,7 @@ function App() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    console.log("useEffect");
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -45,6 +46,7 @@ function App() {
       cartCopy.push({ ...meal, quantity: 1 });
     }
     setCart(cartCopy);
+    console.log("handleAddToCart");
   };
 
   const handleRemoveFromCart = (meal) => {
@@ -58,6 +60,7 @@ function App() {
       setCart((prev) => { return {quantity : prev.quantity - 1 }});
     }
     setCart(cartCopy);
+    console.log("handleRemoveFromCart");
   };
 
   let total = useMemo(() => calculateTotal(cart), [cart]);
